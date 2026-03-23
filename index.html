@@ -7,62 +7,91 @@
 </head>
 <body>
 
-<form onsubmit="return calculateAmount();">
-<label for="fullName">Full Name</label><br>
+<h1>Order Form</h1>
+
+<form onsubmit="return printReceipt();">
+<label for="fullName">Full Name:</label> <!-- Your Full Name -->
+
 <input type="text" id="fullName" required><br><br>
 
-<label for="GandS">Grade and Section</label><br>
+<label for="GandS">Grade and Section:</label> <!--Your Grade and Section -->
 <input type="text" id="GandS" required><br><br>
 
-<label for="menu">Menu</label><br>
+<label for="menu">Food:</label> <!--Your Food Choice-->
 <select id="menu">
-<option value="Rice">Rice</option>
-<option value="Viand">Viand</option>
-<option value="Burger">Burger</option>
-<option value="Juice">Juice</option>
-<option value="Water">Water</option>
+<option value="Chicken meal">Chicken meal</option>
+<option value="Pork meal">Pork meal</option>
+<option value="Beef meal">Beef meal</option>
 </select><br><br>
 
-<label for="quantity">Quantity</label><br>
-<input type="number" id="quantity" min="1" required><br><br>
+<label for="quantity">Quantity (Max of 5):</label> <!--Planned amount to buy-->
+<input type="number" id="quantity" min="1" max="5" required><br><br>
 
-<label>Customer Type</label><br>
-<input type="radio" id="student" name="posit" value="Student" required>
-<label for="student">Student</label><br>
-<input type="radio" id="teacher" name="posit" value="Teacher/Staff">
-<label for="teacher">Teacher/Staff</label><br><br>
+<label for="custType">Customer Type</label><br> <!--Customer type that will determine discounts-->
+<select id="custType" required>
+    <option value="Student">Student</option>
+    <option value="Faculty/Staff">Faculty/Staff</option>
+</select><br><br>
 
-<input type="submit" value="Place Order">
+
+<input type="submit" value="Place Order"> <!--Submit Data-->
 </form>
 
-<p id="capt">Your price will appear here</p>
+<h1>ORDER SUMMARY</h1> <!--Your Order to be displayed-->
+<p id="capt"></p>
 
 <script>
-function calculateAmount(){
-let menu=document.getElementById("menu").value;
-var quantity=Number(document.getElementById("quantity").value);
-var posit;
-if (document.getElementById("student").checked){
-    posit = "Student";
-} else if(document.getElementById("teacher").checked){
-    posit = "Teacher/Staff";
+function printReceipt(){
+    //Declaring variables
+    let name = document.getElementById("fullName").value;
+    let section = document.getElementById("GandS").value;
+    let order = document.getElementById("menu").value;
+    let quantity = Number(document.getElementById("quantity").value);
+    let customType = document.getElementById("custType").value; // get
+    //Calcualting the Initial Price, Determine the Discount, and the Final Price
+    let subtotal = calculateSubtotal(order, quantity); //Connecting subtotal to the function calculateSubtotal
+    let discount = calculateDiscount(subtotal, customType); //Connecting discount to the function calculateDiscount
+    let total = subtotal - discount; //Resulting Price
+
+    document.getElementById("capt").innerHTML = //Display
+        "Name: " + name + "<br>" +
+        "Section: " + section + "<br>" +
+        "Order: " + order + "<br>" +
+        "Quantity: " + quantity + "<br>" +
+        "Customer Type: " + customType + "<br>" +
+        "Subtotal: ₱" + subtotal + "<br>" +
+        "Discount: ₱" + discount + "<br>" +
+        "<strong>Total: ₱" + total + "</strong>"+"<br>"+"<br>"
+        "Thank you for your patronage!";
+
+    return false; // Prevent Refreshing
 }
-price=0;
 
-switch(menu){
-case "Rice":price=10;break;
-case "Viand":price=60;break;
-case "Burger":price=45;break;
-case "Juice":price=20;break;
-case "Water":price=15;break;
-default:document.getElementById("capt").innerHTML="Item not found";return false;
+function calculateSubtotal(order, quantity){
+    let price; //Declare price
+
+    switch(order){
+        case "Chicken meal":
+            price = 75;
+            break;
+        case "Pork meal":
+            price = 85;
+            break;
+        case "Beef meal":
+            price = 105;
+            break;
+        default:
+            return 0;
+    }
+
+    return price * quantity;
 }
 
-let total=price*quantity;
-if(posit==="Student"){total*=0.80;}
-
-document.getElementById("capt").innerHTML="The total price to be paid is ₱"+total;
-return false;
+function calculateDiscount(total, customType){
+    if(customType === "Student"){
+        return total * 0.20; //Discount is to be determined
+    }
+    return 0; //Otherwise, there is no discount
 }
 </script>
 
