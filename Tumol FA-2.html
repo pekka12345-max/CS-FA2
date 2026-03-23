@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Canteen Order Form</title>
+</head>
+<body>
+
+<form onsubmit="return calculateAmount();">
+<label for="fullName">Full Name</label><br>
+<input type="text" id="fullName" required><br><br>
+
+<label for="GandS">Grade and Section</label><br>
+<input type="text" id="GandS" required><br><br>
+
+<label for="menu">Menu</label><br>
+<select id="menu">
+<option value="Rice">Rice</option>
+<option value="Viand">Viand</option>
+<option value="Burger">Burger</option>
+<option value="Juice">Juice</option>
+<option value="Water">Water</option>
+</select><br><br>
+
+<label for="quantity">Quantity</label><br>
+<input type="number" id="quantity" min="1" required><br><br>
+
+<label>Customer Type</label><br>
+<input type="radio" id="student" name="posit" value="Student" required>
+<label for="student">Student</label><br>
+<input type="radio" id="teacher" name="posit" value="Teacher/Staff">
+<label for="teacher">Teacher/Staff</label><br><br>
+
+<input type="submit" value="Place Order">
+</form>
+
+<p id="capt">Your price will appear here</p>
+
+<script>
+function calculateAmount(){
+let menu=document.getElementById("menu").value;
+var quantity=Number(document.getElementById("quantity").value);
+var posit;
+if (document.getElementById("student").checked){
+    posit = "Student";
+} else if(document.getElementById("teacher").checked){
+    posit = "Teacher/Staff";
+}
+price=0;
+
+switch(menu){
+case "Rice":price=10;break;
+case "Viand":price=60;break;
+case "Burger":price=45;break;
+case "Juice":price=20;break;
+case "Water":price=15;break;
+default:document.getElementById("capt").innerHTML="Item not found";return false;
+}
+
+let total=price*quantity;
+if(posit==="Student"){total*=0.80;}
+
+document.getElementById("capt").innerHTML="The total price to be paid is ₱"+total;
+return false;
+}
+</script>
+
+</body>
+</html>
